@@ -22,34 +22,31 @@ MongoClient.connect( connectionURL,
 		}
 		const db = client.db( databaseName );
 		
-		//When searching for ID you must use ObjectID, not just the ID string.
+		// db.collection( "users" )
+		//   .updateOne( {
+		// 		  _id: new ObjectID( "5e048ee9a69de30cd0a69193" )
+		// 	  },
+		// 	  {
+		// 		  $set: {
+		// 			  name: "Aleksander"
+		// 		  },
+		// 		  $inc: {
+		// 			  age: 1
+		// 		  }
+		// 	  } )
+		//   .then(
+		// 	  ( result ) => {console.log( "Success! Number of modified fields", result.modifiedCount );} )
+		//   .catch(
+		// 	  () => {console.log( "Error!" );} );
 		
-		// db.collection('users').findOne({name: 'Gunther', age: 1}, (error, user) => {
-		//     if (error) {
-		//         return console.log('Unable to fetch');
-		//     }
-		//     console.log(user);
-		// });
-		
-		// Find returns cursor
-		// db.collection('users').find({age: 26}).toArray((error, users) => {
-		//     if (error) {
-		//         return console.log('Unable to fetch');
-		//     }
-		//     console.log(users);
-		// });
-		//
-		// db.collection('users').find({age: 26}).count((error, count) => {
-		//     if (error) {
-		//         return console.log('Unable to fetch');
-		//     }
-		//     console.log(count);
-		// });
-		
-		db.collection( "tasks" ).findOne( { _id: new ObjectID( "5e0495a5cb2abd28342fe6b9" ) },
-			( error, task ) => {
-				console.log( task );
-			} );
-		
-		db.collection( "tasks" ).find( { completed: false } ).toArray( ( error, tasks ) => {console.log( tasks );} );
+		db.collection( "tasks" )
+		  .updateMany( {
+			  completed: true
+		  }, {
+			  $set: {
+				  completed: false
+			  }
+		  } )
+		  .then( ( result ) => {console.log( "Success! Number of modified rows: ", result.modifiedCount );} )
+		  .catch( () => {console.log( "Error!" );} );
 	} );
