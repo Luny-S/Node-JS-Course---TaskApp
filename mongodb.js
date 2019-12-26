@@ -22,31 +22,11 @@ MongoClient.connect( connectionURL,
 		}
 		const db = client.db( databaseName );
 		
-		// db.collection( "users" )
-		//   .updateOne( {
-		// 		  _id: new ObjectID( "5e048ee9a69de30cd0a69193" )
-		// 	  },
-		// 	  {
-		// 		  $set: {
-		// 			  name: "Aleksander"
-		// 		  },
-		// 		  $inc: {
-		// 			  age: 1
-		// 		  }
-		// 	  } )
-		//   .then(
-		// 	  ( result ) => {console.log( "Success! Number of modified fields", result.modifiedCount );} )
-		//   .catch(
-		// 	  () => {console.log( "Error!" );} );
-		
 		db.collection( "tasks" )
-		  .updateMany( {
-			  completed: true
-		  }, {
-			  $set: {
-				  completed: false
-			  }
+		  .deleteMany( {
+			  description: 'Task 2'
 		  } )
-		  .then( ( result ) => {console.log( "Success! Number of modified rows: ", result.modifiedCount );} )
+		  .then( () => {console.log( "Success!" );} )
 		  .catch( () => {console.log( "Error!" );} );
 	} );
+
