@@ -24,7 +24,7 @@ MongoClient.connect( connectionURL,
 		
 		db.collection( "tasks" )
 		  .deleteMany( {
-			  description: 'Task 2'
+			  description: "Task 2"
 		  } )
 		  .then( () => {console.log( "Success!" );} )
 		  .catch( () => {console.log( "Error!" );} );
