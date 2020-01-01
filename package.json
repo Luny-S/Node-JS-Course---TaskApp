@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "db": "D:\\Projekty\\NodeJS\\MongoDb\\bin\\mongod.exe --dbpath=D:\\Projekty\\NodeJS\\Database"
   },
   "repository": {
     "url": "https://github.com/olek130/Node-JS-Course---WeatherApp"
