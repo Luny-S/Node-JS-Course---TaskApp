@@ -52,6 +52,18 @@ const userSchema = new mongoose.Schema( {
 	}]
 } );
 
+// Why toJSON works this way? :)
+// When Express parses the object it automatically uses toJSON method and that's why it works
+userSchema.methods.toJSON = function () {
+	const user = this;
+	const userObject = user.toObject();
+	
+	delete userObject.password;
+	delete userObject.tokens;
+	
+	return userObject;
+};
+
 userSchema.methods.generateAuthToken = async function() {
 	const user = this;
 	const token = jwt.sign({_id: user._id.toString()},'R4nd0mStr1ngH3re');
