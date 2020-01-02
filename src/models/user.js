@@ -4,6 +4,7 @@ const bcrypt = require( "bcryptjs" );
 const jwt = require( "jsonwebtoken" );
 const Task = require( "./task" );
 
+
 const userSchema = new mongoose.Schema( {
 	name: {
 		type: String,
@@ -48,16 +49,19 @@ const userSchema = new mongoose.Schema( {
 			type: String,
 			required: true
 		}
-		
-		
-	} ]
+	} ],
+	avatar: {
+		type: Buffer
+	}
+}, {
+	timestamps: true
 } );
 
-userSchema.virtual("tasks", {
+userSchema.virtual( "tasks", {
 	ref: "Task",
 	localField: "_id",
 	foreignField: "owner"
-});
+} );
 
 // Why toJSON works this way? :)
 // When Express parses the object it automatically uses toJSON method and that's why it works
@@ -67,6 +71,7 @@ userSchema.methods.toJSON = function () {
 	
 	delete userObject.password;
 	delete userObject.tokens;
+	delete userObject.avatar;
 	
 	return userObject;
 };
@@ -106,11 +111,11 @@ userSchema.pre( "save", async function ( next ) { // not an arrow function as we
 	next(); // We let mangoose know that this async function finished through next call
 } );
 
-userSchema.pre('remove', async function(next) {
+userSchema.pre( "remove", async function ( next ) {
 	const user = this;
-	await Task.deleteMany({owner: user._id});
+	await Task.deleteMany( { owner: user._id } );
 	next();
-});
+} );
 
 const User = mongoose.model( "User", userSchema );
 

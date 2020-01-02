@@ -1,7 +1,23 @@
 const express = require( "express" );
 const User = require( "../models/user" );
 const auth = require( "../middleware/auth" );
+const multer = require( "multer" );
+const sharp = require( "sharp" );
 const router = new express.Router();
+
+const upload = multer( {
+	// dest: "images", // pass through the image if not defined
+	limits: {
+		fileSize: 1000000// in bytes
+	},
+	fileFilter( req, file, callback ) {
+		// if(!file.originalname.endsWith('.pdf')) {
+		if ( !file.originalname.match( /\.(png|jpg|jpeg)$/ ) ) {
+			return callback( new Error( "Please upload an image (png, jpg or jpeg)" ) );
+		}
+		callback( undefined, true );
+	}
+} );
 
 router.post( "/users", async ( req, res ) => {
 	const user = new User( req.body );
@@ -55,6 +71,17 @@ router.post( "/users/logoutAll", auth, async ( req, res ) => {
 	}
 } );
 
+// router.post("/users/me/avatar",auth, upload.single("avatar"), (req,res) => {
+router.post( "/users/me/avatar", auth, upload.single( "avatar" ), async ( req, res ) => {
+	// req.user.avatar = req.file.buffer;
+	const buffer = await sharp( req.file.buffer ).resize( { width: 250, height: 250 } ).png().toBuffer();
+	req.user.avatar = buffer;
+	await req.user.save();
+	res.send();
+}, ( error, req, res, next ) => {
+	res.status( 400 ).send( { error: error.message } );
+} );
+
 router.get( "/users/me", auth, async ( req, res ) => {
 	res.send( req.user );
 	// try {
@@ -66,6 +93,22 @@ router.get( "/users/me", auth, async ( req, res ) => {
 	// 	res.status( 500 )
 	// 	   .send();
 	// }
+} );
+
+router.get( "/users/:id/avatar", async ( req, res ) => {
+	try {
+		const user = await User.findById( req.params.id );
+		if ( !user || !user.avatar ) {
+			throw new Error();
+		}
+		
+		res.set( "Content-Type", "image/jpg" );
+		res.send( user.avatar );
+	}
+	catch ( e ) {
+		res.status( 404 )
+		   .send( e );
+	}
 } );
 
 // router.get( "/users/:id", auth, async ( req, res ) => {
@@ -123,5 +166,15 @@ router.delete( "/users/me", auth, async ( req, res ) => {
 		   .send();
 	}
 } );
+
+router.delete( "/users/me/avatar", auth, async ( req, res ) => {
+	req.user.avatar = undefined;
+	await req.user.save();
+	
+	res.send();
+}, ( error, req, res, next ) => {
+	res.status( 400 ).send( { error: error.message } );
+} );
+
 
 module.exports = router;
