@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev-nodemon": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "dev": "env-cmd -f ./config/dev.env node src/index.js",
     "db": "D:\\Projekty\\NodeJS\\MongoDb\\bin\\mongod.exe --dbpath=D:\\Projekty\\NodeJS\\Database"
   },
   "repository": {
@@ -14,18 +15,20 @@
   "license": "BSD-3-Clause",
   "devDependencies": {
     "@types/node": "^12.12.14",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "env-cmd": "^10.0.1"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "hbs": "^4.0.6",
-    "request": "^2.88.0",
-    "mongodb": "^3.4.1",
-    "mongoose": "^5.8.3",
-    "validator": "^12.1.0",
-    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.4.1",
+    "mongoose": "^5.8.4",
     "multer": "^1.4.2",
-    "sharp": "^0.23.4"
+    "request": "^2.88.0",
+    "sharp": "^0.23.4",
+    "validator": "^12.1.0"
   }
 }
