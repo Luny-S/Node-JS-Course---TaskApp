@@ -7,7 +7,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-
 app.use( express.json() );
 app.use( userRouter );
 app.use( taskRouter );
@@ -64,3 +63,21 @@ app.listen( port, () => {
 // };
 //
 // myFunction();
+
+/**
+ * User - Task relation
+ */
+// const Task = require( "./models/task" );
+// const User = require("./models/user");
+// const main = async () => {
+// 	// // Get owner of the task
+// 	// const task = await Task.findById( "5e0d2e47a67cc74b9c3a215f" );
+// 	// await task.populate('owner').execPopulate();
+// 	// console.log( task.owner );
+//
+// 	// Get tasks of the user
+// 	const user = await User.findById("5e0d2e3fa67cc74b9c3a215c");
+// 	await user.populate('tasks').execPopulate();
+// 	console.log( user.tasks );
+// };
+// main();

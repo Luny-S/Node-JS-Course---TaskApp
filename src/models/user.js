@@ -42,15 +42,21 @@ const userSchema = new mongoose.Schema( {
 			}
 		}
 	},
-	tokens: [{ // array of objects
+	tokens: [ { // array of objects
 		token: {
 			type: String,
 			required: true
 		}
 		
 		
-	}]
+	} ]
 } );
+
+userSchema.virtual("tasks", {
+	ref: "Task",
+	localField: "_id",
+	foreignField: "owner"
+});
 
 // Why toJSON works this way? :)
 // When Express parses the object it automatically uses toJSON method and that's why it works
@@ -64,25 +70,25 @@ userSchema.methods.toJSON = function () {
 	return userObject;
 };
 
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
 	const user = this;
-	const token = jwt.sign({_id: user._id.toString()},'R4nd0mStr1ngH3re');
-	user.tokens = user.tokens.concat({ token });
+	const token = jwt.sign( { _id: user._id.toString() }, "R4nd0mStr1ngH3re" );
+	user.tokens = user.tokens.concat( { token } );
 	await user.save();
 	
 	return token;
 };
 
-userSchema.statics.findByCredentials = async (email, password) => {
-	const user = await User.findOne({ email });
+userSchema.statics.findByCredentials = async ( email, password ) => {
+	const user = await User.findOne( { email } );
 	
-	if(!user) {
-		throw new Error('Unable to login');
+	if ( !user ) {
+		throw new Error( "Unable to login" );
 	}
 	
-	const isMatch = await bcrypt.compare(password, user.password);
+	const isMatch = await bcrypt.compare( password, user.password );
 	if ( !isMatch ) {
-		throw new Error('Unable to login');
+		throw new Error( "Unable to login" );
 	}
 	
 	return user;
