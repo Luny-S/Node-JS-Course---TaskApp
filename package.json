@@ -7,7 +7,12 @@
     "start": "node src/index.js",
     "dev-nodemon": "env-cmd -f ./config/dev.env nodemon src/index.js",
     "dev": "env-cmd -f ./config/dev.env node src/index.js",
-    "db": "D:\\Projekty\\NodeJS\\MongoDb\\bin\\mongod.exe --dbpath=D:\\Projekty\\NodeJS\\Database"
+    "db": "D:\\Projekty\\NodeJS\\MongoDb\\bin\\mongod.exe --dbpath=D:\\Projekty\\NodeJS\\Database",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true
   },
   "repository": {
     "url": "https://github.com/olek130/Node-JS-Course---WeatherApp"
@@ -16,7 +21,9 @@
   "devDependencies": {
     "@types/node": "^12.12.14",
     "nodemon": "^2.0.2",
-    "env-cmd": "^10.0.1"
+    "env-cmd": "^10.0.1",
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
